@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدرسة صلاح الدين الإسلامية الخاصة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- إعدادات الألوان والمتغيرات --- */
+        :root {
+            --primary-color: #1a3c6d;    /* أزرق أكاديمي داكن */
+            --secondary-color: #f0a500;  /* ذهبي حيوي */
+            --accent-color: #3f72af;     /* أزرق فاتح للتفاصيل */
+            --bg-color: #f8f9fa;         /* رمادي فاتح جداً للخلفية */
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --white: #ffffff;
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.05);
+            --shadow-hover: 0 15px 35px rgba(26, 60, 109, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden; /* لمنع التمرير العرضي غير المرغوب فيه */
+        }
+
+        /* --- تحسينات التمرير --- */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
+
+        a { text-decoration: none; transition: 0.3s ease; }
+        ul { list-style: none; }
+        img { max-width: 100%; height: auto; } /* ضروري للتجاوب */
+
+        /* --- الهيدر والقائمة --- */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1001; /* لضمان ظهوره فوق القائمة في الموبايل */
+        }
+
+        .logo img {
+            height: 45px;
+            width: auto;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px; 
+            margin-right: auto;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.95rem; 
+            padding: 5px 8px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary-color); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .menu-toggle {
+            display: none; 
+        }
+
+        /* --- الأزرار --- */
+        .btn {
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            white-space: nowrap; 
+            text-align: center;
+        }
+        
+        .hero-buttons .btn {
+            padding: 12px 35px !important;
+            font-size: 1rem; 
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: 2px solid var(--primary-color);
+        }
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--primary-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            border: 2px solid var(--secondary-color);
+        }
+        .btn-secondary:hover {
+            background-color: transparent;
+            color: var(--secondary-color);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            min-height: 85vh; /* تغيير من height إلى min-height للتجاوب */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px; /* هوامش جانبية للشاشات الصغيرة */
+            
+            background: linear-gradient(135deg, rgba(26, 60, 109, 0.85), rgba(63, 114, 175, 0.75)),
+                        url('img/3.jpg');
+            
+            background-size: cover;     
+            background-position: center; 
+            background-repeat: no-repeat;
+            
+            clip-path: ellipse(150% 100% at 50% 0%);
+            margin-bottom: 50px;
+        }
+        
+        .hero-content {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap; /* للسماح بنزول الأزرار تحت بعضها في الموبايل */
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto 35px;
+            opacity: 0.95;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        /* --- العناوين المشتركة --- */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 0 15px;
+        }
+        .section-header h2 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-header h2::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        /* --- المميزات --- */
+        .features { padding: 80px 20px; background-color: var(--white); }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* تعديل بسيط للحجم */
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.3s;
+            border: 1px solid #eee;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--secondary-color);
+        }
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            background: rgba(240, 165, 0, 0.1);
+            width: 70px;
+            height: 70px;
+            line-height: 70px;
+            border-radius: 50%;
+        }
+
+        /* --- المراحل الدراسية --- */
+        .stages { padding: 80px 20px; background-color: var(--bg-color); }
+        .stages-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* تحسين للموبايل */
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .stage-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: 0.3s;
+        }
+        .stage-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+        .stage-card img {
+            width: 100%;
+            height: 220px; /* زيادة بسيطة للارتفاع */
+            object-fit: cover;
+        }
+        .stage-info { padding: 25px; }
+        .stage-info h3 { color: var(--primary-color); margin-bottom: 10px; font-size: 1.3rem; }
+        .stage-info p { color: var(--text-light); font-size: 0.95rem; }
+
+        /* --- قسم المعلمين --- */
+        .teachers-section {
+            padding: 80px 20px;
+            background: var(--white);
+            position: relative;
+        }
+
+        .search-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .search-box {
+            padding: 12px 20px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #eee;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .search-box:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(26, 60, 109, 0.1);
+        }
+
+        .teacher-slider-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: auto;
+            padding-bottom: 30px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch; /* تحسين التمرير في iOS */
+        }
+        
+        .teacher-cards-wrapper {
+            display: flex;
+            gap: 25px;
+            padding: 10px;
+        }
+
+        .teacher-card {
+            min-width: 260px;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--secondary-color);
+            scroll-snap-align: center;
+            transition: 0.3s;
+        }
+        .teacher-card:hover { transform: translateY(-5px); }
+
+        .teacher-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--bg-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+
+        .teacher-name { color: var(--primary-color); font-size: 1.1rem; margin-bottom: 5px; }
+        .teacher-spec { color: var(--secondary-color); font-weight: bold; font-size: 0.9rem; margin-bottom: 5px; }
+        .teacher-exp { color: var(--text-light); font-size: 0.85rem; }
+
+        /* --- الفوتر --- */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 60px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            padding: 0 20px;
+        }
+
+        .footer-col h3 {
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+        }
+
+        .contact-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-list i { color: var(--secondary-color); width: 25px; flex-shrink: 0; }
+        .contact-list a { color: #e0e0e0; font-size: 0.95rem; word-break: break-all; }
+        .contact-list a:hover { color: var(--secondary-color); padding-right: 5px; }
+
+        .social-links { margin-top: 20px; }
+        .social-links a {
+            color: var(--white);
+            font-size: 1.2rem;
+            margin-left: 15px;
+            transition: 0.3s;
+            display: inline-block;
+        }
+        .social-links a:hover { color: var(--secondary-color); transform: scale(1.1); }
+
+        .map-wrapper {
+            height: 200px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        /* -------------------------------------------
+           --- ميديا كويري للتجاوب الكامل (Responsive) ---
+           ------------------------------------------- */
+        
+        /* للأجهزة اللوحية (Tablets) والشاشات المتوسطة (أقل من 992px) */
+        @media (max-width: 992px) {
+            .hero-content h1 { font-size: 3rem; }
+            .hero-content p { font-size: 1.2rem; }
+            .section-header h2 { font-size: 2rem; }
+            .navbar { padding: 15px; }
+        }
+
+        /* للموبايل والأجهزة الصغيرة (أقل من 768px) */
+        @media (max-width: 768px) {
+            
+            /* الهيدر والقائمة */
+            .menu-toggle {
+                display: block; 
+                font-size: 1.6rem;
+                color: var(--primary-color);
+                cursor: pointer;
+                z-index: 1002;
+            }
+
+            .navbar { 
+                flex-direction: row; 
+                justify-content: space-between; 
+            }
+            
+            .nav-links { 
+                display: none; 
+                position: fixed; /* تغيير إلى fixed لضمان التغطية الكاملة */
+                top: 0;
+                right: 0;
+                width: 75%; /* تغطية 75% من الشاشة */
+                height: 100vh;
+                background-color: var(--white);
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                z-index: 999;
+                flex-direction: column; 
+                margin-right: 0;
+                padding: 80px 20px 20px 20px; /* مساحة من الأعلى للشعار */
+                align-items: center;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            
+            .nav-links a {
+                display: block; 
+                padding: 15px;
+                font-size: 1.1rem;
+                border-radius: 8px;
+            }
+            
+            .nav-links a:hover {
+                background-color: var(--bg-color);
+            }
+            
+            .nav-links a::after { display: none; }
+            .nav-links.active { display: flex; }
+
+            /* Hero */
+            .hero { 
+                min-height: 70vh; /* ارتفاع أقل للموبايل */
+                clip-path: ellipse(180% 100% at 50% 0%); 
+                margin-bottom: 30px;
+                padding-top: 80px; /* مساحة للهيدر */
+                padding-bottom: 40px;
+            }
+            .hero-content h1 { font-size: 2.2rem; }
+            .hero-content p { font-size: 1rem; }
+            .hero-buttons { flex-direction: column; gap: 15px; width: 100%; max-width: 300px; margin: 30px auto 0; }
+            .hero-buttons .btn { width: 100%; }
+
+            /* الأقسام العامة */
+            .section-header { margin-bottom: 35px; }
+            .features, .stages, .teachers-section { padding: 50px 15px; }
+            
+            /* الفوتر */
+            .footer-content { 
+                text-align: center; 
+                grid-template-columns: 1fr; /* عمود واحد في الموبايل */
+                gap: 30px;
+            }
+            .contact-list li { justify-content: center; }
+            .logo span { font-size: 0.9rem; } /* تصغير اسم المدرسة بجانب الشعار */
+        }
+
+        /* للهواتف الصغيرة جداً (أقل من 480px) */
+        @media (max-width: 480px) {
+            .hero-content h1 { font-size: 1.8rem; }
+            .logo img { height: 35px; }
+            .logo span { font-size: 0.85rem; }
+            .feature-card { padding: 20px; }
+            .stage-card img { height: 180px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <img src="logo.png" alt="شعار المدرسة" onerror="this.style.display='none'"> 
+                <span>مدرسة صلاح الدين الخاصة</span>
+            </div>
+            
+            <div class="menu-toggle" id="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+
+            <ul class="nav-links" id="main-nav-links">
+                <li><a href="#home">الرئيسية</a></li>
+                <li><a href="#about">عن المدرسة</a></li>
+                <li><a href="#teachers">فريق العمل</a></li>
+                <li><a href="student_portal.html">نتائج الطلاب</a></li>
+                <li><a href="jobs.html">الوظائف المتاحة</a></li>
+                <li><a href="complaints.html">الشكاوى والمقترحات</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>الريادة في التعليم .. والقيم</h1>
+            <p>بيئة تعليمية إسلامية عصرية، ندمج فيها أصالة القيم مع أحدث تقنيات التعليم لبناء جيل واعد.</p>
+            
+            <div class="hero-buttons">
+                <a href="#login" class="btn btn-primary"><i class="fas fa-user"></i> دخول</a>
+                <a href="#contact" class="btn btn-secondary">تواصل معنا</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="about">
+        <div class="section-header">
+            <h2>لماذا مدرسة صلاح الدين؟</h2>
+            <p style="color: var(--text-light);">نقدم تجربة تعليمية متكاملة تركز على الطالب</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-book-open"></i>
+                <h3>منهج قيمي</h3>
+                <p>اهتمام بالغ بالقرآن الكريم والسنة النبوية وغرس الأخلاق الحميدة.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-microscope"></i>
+                <h3>معامل متطورة</h3>
+                <p>تجهيزات علمية وتكنولوجية حديثة لمواكبة التطور العالمي.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-running"></i>
+                <h3>تنمية مهارات</h3>
+                <p>ملاعب وأنشطة رياضية وفنية لاكتشاف وتنمية مواهب الطلاب.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>بيئة آمنة</h3>
+                <p>نظام أمني متكامل وشبكة مواصلات تغطي كافة المناطق.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stages" id="stages">
+        <div class="section-header">
+            <h2>مساراتنا التعليمية</h2>
+        </div>
+        <div class="stages-container">
+            <div class="stage-card">
+                <img src="img/2.jpg" alt="KG" onerror="this.src='https://images.unsplash.com/photo-1587654780291-39c9404d746b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'">
+                <div class="stage-info">
+                    <h3>رياض الأطفال (KG)</h3>
+                    <p>تأسيس قوي بأسلوب المنتسوري، بيئة مرحة تشجع على الاستكشاف والتعلم الذاتي.</p>
+                </div>
+            </div>
+            <div class="stage-card">
+                <img src="img/1.jpg" alt="Primary" onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'">
+                <div class="stage-info">
+                    <h3>المرحلة الابتدائية</h3>
+                    <p>بناء الشخصية، التميز الأكاديمي، وتنمية مهارات التفكير واللغات.</p>
+                </div>
+            </div>
+            <div class="stage-card">
+                <img src="img/3.jpg" alt="Prep" onerror="this.src='https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'">
+                <div class="stage-info">
+                    <h3>المرحلة الإعدادية</h3>
+                    <p>إعداد قادة المستقبل، التركيز على العلوم التطبيقية والبحث العلمي.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="teachers-section" id="teachers">
+        <div class="section-header">
+            <h2>نخبة المعلمين</h2>
+            <p>كادر تعليمي ذو خبرة وكفاءة عالية</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-box" placeholder="ابحث عن اسم المعلم..." onkeyup="searchTeacher()">
+        </div>
+
+        <div class="teacher-slider-container">
+            <div class="teacher-cards-wrapper" id="teacherWrapper">
+                <div class="teacher-card">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5OyY-6K_eeoUp6AowTgQQXvHwvcAVbT_3a9aMr4nDBGqbj3TFyDBSs9EqgIU-3Uzt-RY94RuWEhlzplkcfiH4Q6HbM6bJXE8lAAuo5VBN9H-tLFCq-cMnAAC0Y3QQBpvVaA_mX3E9cpruhcggVXVN09rsunymiLzKV61WakT_7vpgBMw4sfkqJbNZGjJL/s16000/449836198_452397614339933_5716010784140162339_n.jpg" alt="Teacher" class="teacher-img">
+                    <h4 class="teacher-name">أ/ سيد خلف</h4>
+                    <p class="teacher-spec">لغة عربية</p>
+                    <p class="teacher-exp">15 سنة خبرة</p>
+                </div>
+                
+                <div class="teacher-card">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjGtkXflcVThzUPKbMK3q1yYXSuqe4gp9CSppm4r3FxLNsX28ryrAPIF_FeCT4jiBONhW0jYdpm27sHpkf2UUg8l_17YypbIHXqgrsImj9IaHtRRBV0fFBfKFJ-D6G8Zd9mukFvQYMb6vtBtzc6WBNLlgAyyKHaGhV6rQ21zY1ni_-ZM2FhO1apWoaG9Xzw/s1600/%D8%B5%D9%88%D8%B1%D8%A9%20%D9%88%D8%A7%D8%AA%D8%B3%D8%A7%D8%A8%20%D8%A8%D8%AA%D8%A7%D8%B1%D9%8A%D8%AE%202024-10-20%20%D9%81%D9%8A%2021.41.36_41b90293.jpg" alt="Teacher" class="teacher-img">
+                    <h4 class="teacher-name">د. عماد عبد الحميد</h4>
+                    <p class="teacher-spec">لغة عربية</p>
+                    <p class="teacher-exp">15 سنة خبرة</p>
+                </div>
+
+                <div class="teacher-card">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhlARCmxP2eIgfyk9sXx0o8NOgaQeTa6CrBXx3dAr_VBiAVNj5bOcMt0J6HrQO1HbNh6oEhKNJWCAejUJoKVotYrzXtV_RYTxK47Xy8ohJN9a3e2yTg1APx3X7WwCA7APMa9UVWptE87CVk4Hw_YjNNpguhgU1-UHSzmO9CISJRQ084biLDnHyXBjOKT7P9/s1600/IMG_1379.JPG" alt="Teacher" class="teacher-img">
+                    <h4 class="teacher-name">أ/ محمد الحسن</h4>
+                    <p class="teacher-spec">لغة انجليزية</p>
+                    <p class="teacher-exp">8 سنوات خبرة</p>
+                </div>
+
+                <div class="teacher-card">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg3X1IE7zPyAW9lGfpm5FRcpUW5vz4lFsuN-PUMTp744QjePEs8iXFfwHvIqNLL8438kDJ8hqtnX6wHICjS_Eo7gad2DakPdY9iZvyw7lsfavISQ35_C1LgasncUjEIRG9ssWpsWTo8ByNacEcbAmrF4qndLBJeVF3qmlss6JiK2n7NxldPOUa9ytGheUgH/s1600/%D9%84%D9%82%D8%B7%D8%A9%20%D8%B4%D8%A7%D8%B4%D8%A9%202024-10-20%20213019.png" alt="Teacher" class="teacher-img">
+                    <h4 class="teacher-name">أ/ أحمد ربيع</h4>
+                    <p class="teacher-spec">رياضيات</p>
+                    <p class="teacher-exp">8 سنوات خبرة</p>
+                </div>
+
+                <div class="teacher-card">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiz1vGeACxuL_BgqoZw7A8ZI3K91fgsy1evt1KW20ebwKxye4c933uRH_PayQuAj6lEm90uuQeW29Wvgt6d_z-P5qZxfjicjrVVb8l8-soymL45FKvPqUrenPC0_XbTKCEO6IPfcvrzM6mI4G6oK6NMr_zndp6F9IT-HwQBHFoGHjmSXhhnkIE0SQtgsrn1/s1600/%D8%B5%D9%88%D8%B1%D8%A9%20%D9%88%D8%A7%D8%AA%D8%B3%D8%A7%D8%A8%20%D8%A8%D8%AA%D8%A7%D8%B1%D9%8A%D8%AE%202024-10-20%20%D9%81%D9%8A%2021.41.35_26238d21%D8%B1.jpg" alt="Teacher" class="teacher-img">
+                    <h4 class="teacher-name">أ/ أسماء قاسم</h4>
+                    <p class="teacher-spec">لغة عربية</p>
+                    <p class="teacher-exp">10 سنوات خبرة</p>
+                </div>
+
+                 <div class="teacher-card">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhngU37LFm8abPbPKMoJ5-KZt_viwfvF_z251wMoD8NSlB2btpuaP5PmRcmEi0TqV2BvlhQHEwpGV2SS27cO-f5w0LUZaU_etx-CKz41K61p2PqfGohPHDQtp4Ofqe8MXmMhR2VSpqvlQedzal9IrvJPNQFqQM3fHK2UiNHzYjGH-b8WklmCl9lb6GmxJWF/s1600/%D8%B1%D8%A3%D9%81%D8%AA.jpg" alt="Teacher" class="teacher-img">
+                    <h4 class="teacher-name">أ/ رأفت سيد</h4>
+                    <p class="teacher-spec">لغة عربية</p>
+                    <p class="teacher-exp">6 سنوات خبرة</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>تواصل معنا</h3>
+                <ul class="contact-list">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <a href="https://goo.gl/maps/example" target="_blank">المنيا - أرض سلطان - بجوار مسجد صلاح الدين</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone-alt"></i>
+                        <a href="tel:01033910655">01033910655</a>
+                    </li>
+                    <li>
+                        <i class="far fa-envelope"></i>
+                        <a href="mailto:elfathsociety@gmail.com">elfathsociety@gmail.com</a>
+                    </li>
+                </ul>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>روابط سريعة</h3>
+                <ul class="contact-list">
+                    <li><a href="#about">عن المدرسة</a></li>
+                    <li><a href="#stages">القبول والتسجيل</a></li>
+                    <li><a href="#jobs">الوظائف</a></li>
+                    <li><a href="#complaints">الشكاوى والمقترحات</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>موقعنا</h3>
+                <div class="map-wrapper">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3519.060043119912!2d30.750115224730784!3d28.114200975951704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145b24faa0cfffff%3A0x84d27612513a6abe!2z2YXYr9ix2LPYqSDYtdmE2KfYrSDYp9mE2K_ZitmGINin2YTYp9iz2YTYp9mF2YrYqSDYp9mE2K7Yp9i12Kk!5e0!3m2!1sar!2seg!4v1764871763959!5m2!1sar!2seg" 
+                        width="100%" 
+                        height="100%" 
+                        frameborder="0" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2024 مدرسة صلاح الدين الإسلامية الخاصة. جميع الحقوق محفوظة.
+        </div>
+    </footer>
+
+    <script>
+        // دالة بحث المعلمين
+        function searchTeacher() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.teacher-card');
+            
+            cards.forEach(card => {
+                const name = card.querySelector('.teacher-name').textContent.toLowerCase();
+                if (name.includes(input)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        // دالة قائمة الهامبرغر للموبايل
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.getElementById('mobile-menu-toggle');
+            const navLinks = document.getElementById('main-nav-links');
+            const links = navLinks.querySelectorAll('a');
+
+            // تبديل القائمة
+            toggleButton.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+
+            // إغلاق القائمة عند الضغط على أي رابط
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

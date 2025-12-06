@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقديم للوظائف | مدرسة صلاح الدين الإسلامية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- المتغيرات العامة (مستمدة من index.html) --- */
+        :root {
+            --primary-color: #1a3c6d;
+            --secondary-color: #f0a500;
+            --accent-color: #3f72af;
+            --bg-color: #f8f9fa;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --white: #ffffff;
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.05);
+            --shadow-hover: 0 15px 35px rgba(26, 60, 109, 0.15);
+            /* ألوان الواتساب */
+            --wa-green-dark: #128C7E;
+            --wa-green-light: #25D366;
+            --wa-bg-chat: #ECE5DD;
+            --wa-message-sent: #DCF8C6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-color); color: var(--text-dark); line-height: 1.7; overflow-x: hidden; }
+        a { text-decoration: none; transition: 0.3s ease; }
+        ul { list-style: none; }
+        img { max-width: 100%; height: auto; }
+
+        /* --- الهيدر --- */
+        header { background-color: var(--white); box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .navbar { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+        .logo { font-size: 1.3rem; font-weight: 800; color: var(--primary-color); display: flex; align-items: center; gap: 12px; z-index: 1001; }
+        .logo img { height: 45px; width: auto; }
+        .nav-links { display: flex; gap: 15px; margin-right: auto; }
+        .nav-links a { color: var(--text-dark); font-weight: 600; padding: 5px 8px; position: relative; }
+        .nav-links a:hover { color: var(--primary-color); }
+        .menu-toggle { display: none; }
+
+        /* --- تنسيقات الصفحة --- */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--white);
+            margin-bottom: 50px;
+        }
+        .page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .page-header p { opacity: 0.9; max-width: 600px; margin: 0 auto; }
+
+        .form-section { max-width: 900px; margin: 0 auto 80px; padding: 0 20px; }
+        .form-container {
+            background: var(--white); padding: 40px; border-radius: 20px;
+            box-shadow: var(--shadow-soft); border-top: 5px solid var(--secondary-color);
+        }
+
+        .form-group { margin-bottom: 25px; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--primary-color); }
+        .form-control {
+            width: 100%; padding: 12px 15px; border: 2px solid #eee; border-radius: 8px;
+            font-family: inherit; font-size: 1rem; transition: 0.3s;
+        }
+        .form-control:focus { border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(26, 60, 109, 0.1); }
+        textarea.form-control { resize: vertical; min-height: 150px; }
+        input[type="tel"] { direction: rtl; text-align: right; }
+        input[type="tel"]::placeholder { text-align: right; direction: rtl; }
+        
+        /* تنسيقات المجموعات الديناميكية */
+        .dynamic-fields-container {
+            border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin-top: 15px;
+            background-color: #fcfcfc;
+        }
+        .dynamic-title { color: var(--accent-color); font-weight: 700; margin-bottom: 15px; }
+
+        .dynamic-entry {
+            display: grid; grid-template-columns: repeat(3, 1fr) 50px; gap: 10px;
+            margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #eee;
+            align-items: center;
+        }
+        .dynamic-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .dynamic-entry input { margin-bottom: 0; }
+        
+        /* تنسيق زر الإضافة والإزالة */
+        .btn-add, .btn-remove {
+            background: var(--accent-color); color: var(--white); border: none;
+            padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .btn-add { background: var(--secondary-color); width: 100%; margin-top: 10px; }
+        .btn-add:hover { background: #d99600; }
+        .btn-remove { background: #e74c3c; padding: 10px; }
+        .btn-remove:hover { background: #c0392b; }
+
+        /* تنسيق الأزرار الرئيسية */
+        .btn-submit {
+            background-color: var(--secondary-color); color: var(--white); border: none;
+            padding: 15px 40px; font-size: 1.1rem; font-weight: bold; border-radius: 50px;
+            cursor: pointer; width: 100%; transition: 0.3s;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-submit:hover { background-color: #d99600; transform: translateY(-3px); }
+
+        /* --- الفوتر --- */
+        footer { background-color: var(--primary-color); color: var(--white); padding: 60px 0 20px; margin-top: auto; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; padding: 0 20px; }
+        .footer-col h3 { color: var(--secondary-color); margin-bottom: 25px; font-size: 1.4rem; }
+        .contact-list li { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .contact-list i { color: var(--secondary-color); width: 25px; flex-shrink: 0; }
+        .contact-list a { color: #e0e0e0; font-size: 0.95rem; }
+        .social-links { margin-top: 20px; }
+        .social-links a { color: var(--white); font-size: 1.2rem; margin-left: 15px; }
+        .copyright { text-align: center; padding-top: 40px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; color: rgba(255,255,255,0.6); }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; font-size: 1.6rem; color: var(--primary-color); cursor: pointer; z-index: 1002; }
+            .nav-links { display: none; position: fixed; top: 0; right: 0; width: 75%; height: 100vh; background-color: var(--white); z-index: 999; flex-direction: column; padding: 80px 20px; align-items: center; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
+            .nav-links.active { display: flex; }
+            .form-container { padding: 25px; }
+            .page-header h1 { font-size: 1.8rem; }
+            .dynamic-entry { grid-template-columns: 1fr; }
+            .btn-remove { width: 100%; margin-top: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <img src="logo.png" alt="شعار المدرسة" onerror="this.style.display='none'"> 
+                <a href="index.html" style="color: inherit; display: flex; align-items: center; gap: 10px;">
+                    <span>مدرسة صلاح الدين الخاصة</span>
+                </a>
+            </div>
+            <div class="menu-toggle" id="mobile-menu-toggle"><i class="fas fa-bars"></i></div>
+            <ul class="nav-links" id="main-nav-links">
+                <li><a href="index.html#home">الرئيسية</a></li>
+                <li><a href="index.html#about">عن المدرسة</a></li>
+                <li><a href="index.html#stages">المراحل</a></li>
+                <li><a href="index.html#teachers">فريق العمل</a></li>
+                <li><a href="index.html#contact">تواصل معنا</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <h1>التقديم للوظائف</h1>
+        <p> يرجى ملء النموذج بعناية للانضمام إلى فريق عمل المدرسة.</p>
+    </section>
+
+    <section class="form-section">
+        <div class="form-container">
+            <div id="formMessage"></div> 
+            
+            <form id="jobsForm">
+                
+                <div class="form-group">
+                    <label class="form-label">البيانات الشخصية *</label>
+                    <input type="text" name="name" class="form-control" placeholder="الاسم رباعي  *" required style="margin-bottom: 10px;">
+                    <input type="date" name="dob" class="form-control" placeholder="تاريخ الميلاد *" required style="margin-bottom: 10px; text-align: right;" dir="ltr">
+                    <input type="tel" name="phone" class="form-control" placeholder="رقم الهاتف *" required style="margin-bottom: 10px;">
+                    <input type="email" name="email" class="form-control" placeholder="البريد الإلكتروني * " required style="margin-bottom: 10px;">
+                    <input type="text" name="address" class="form-control" placeholder="العنوان بالكامل *" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">الوظيفة المتقدم إليها *</label>
+                    <input type="text" name="job_applied" class="form-control" placeholder="اكتب اسم الوظيفة التي تود التقديم لها (مثال: معلم لغة إنجليزية)" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">المؤهل الدراسي *</label>
+                    <input type="text" name="uni_name" class="form-control" placeholder="اسم الجامعة / المعهد *" required style="margin-bottom: 10px;">
+                    <input type="text" name="faculty_name" class="form-control" placeholder="اسم الكلية *" required style="margin-bottom: 10px;">
+                    <input type="text" name="dept_name" class="form-control" placeholder="القسم / الشعبة *" required style="margin-bottom: 10px;">
+                    <input type="number" name="grad_year" class="form-control" placeholder="سنة التخرج *" required min="1980" max="2025">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">الخبرات السابقة (اسم جهة العمل، المسمى الوظيفي، مدة العمل)</label>
+                    <div class="dynamic-fields-container">
+                        <div id="experienceFields">
+                            <div class="dynamic-entry" data-index="1">
+                                <input type="text" name="experience_company_1" class="form-control" placeholder="اسم جهة العمل 1" required>
+                                <input type="text" name="experience_job_title_1" class="form-control" placeholder="المسمى الوظيفي 1" required>
+                                <input type="text" name="experience_duration_1" class="form-control" placeholder="مدة العمل 1 (مثال: سنتان)" required>
+                                <button type="button" class="btn-remove btn-remove-exp" onclick="removeEntry(this, 'experienceFields')" style="display:none;"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add" onclick="addEntry('experienceFields', 'experience')">
+                            إضافة جهة عمل سابقة <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">الدورات التدريبية الحاصل عليها (اسم الدورة، الجهة)</label>
+                    <div class="dynamic-fields-container">
+                        <div id="courseFields">
+                            <div class="dynamic-entry" data-index="1">
+                                <input type="text" name="course_name_1" class="form-control" placeholder="اسم الدورة 1">
+                                <input type="text" name="course_provider_1" class="form-control" placeholder="الجهة المانحة 1">
+                                <div class="form-control" style="background:transparent; border:none; padding:0;"></div>
+                                <button type="button" class="btn-remove btn-remove-course" onclick="removeEntry(this, 'courseFields')" style="display:none;"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add" onclick="addEntry('courseFields', 'course')">
+                            إضافة دورة تدريبية أخرى <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="btn-submit">
+                    إرسال طلب التوظيف <i class="fas fa-paper-plane"></i>
+                </button>
+                
+                <p style="margin-top: 15px; font-size: 0.85rem; color: #777; text-align: center;">
+                    <i class="fas fa-lock"></i> سيتم التواصل معك عبر البريد الإلكتروني أو الهاتف في حالة الاختيار.
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>تواصل معنا</h3>
+                <ul class="contact-list">
+                    <li><i class="fas fa-map-marker-alt"></i><span>المنيا - أرض سلطان - بجوار مسجد صلاح الدين</span></li>
+                    <li><i class="fas fa-phone-alt"></i><a href="tel:01033910655">01033910655</a></li>
+                    <li><i class="far fa-envelope"></i><a href="mailto:elfathsociety@gmail.com">elfathsociety@gmail.com</a></li>
+                </ul>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>روابط سريعة</h3>
+                <ul class="contact-list">
+                    <li><a href="index.html#about">عن المدرسة</a></li>
+                    <li><a href="index.html#stages">القبول والتسجيل</a></li>
+                    <li><a href="jobs.html">الوظائف</a></li>
+                    <li><a href="complaints.html">الشكاوى والمقترحات</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>موقعنا</h3>
+                <div style="height: 200px; border-radius: 15px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1);">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3519.060043119912!2d30.750115224730784!3d28.114200975951704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145b24faa0cfffff%3A0x84d27612513a6abe!2z2YXYr9ix2LPYqSDYtdmE2KfYrSDYp9mE2K_ZitmGINin2YTYp9iz2YTYp9mF2YrYqSDYp9mE2K7Yp9i12Kk!5e0!3m2!1sar!2seg!4v1764871763959!5m2!1sar!2seg" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">© 2024 مدرسة صلاح الدين الإسلامية الخاصة. جميع الحقوق محفوظة.</div>
+    </footer>
+    
+    <div class="wa-widget-container">
+        <div class="wa-chat-box" id="waChatBox">
+            <div class="wa-chat-header">
+                <img src="logo.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3774/3774299.png'" class="wa-avatar">
+                <div class="wa-header-info">
+                    <h4>مدرسة صلاح الدين</h4>
+                    <p>يرد عادةً خلال ساعة</p>
+                </div>
+                <div class="wa-close-btn" onclick="toggleWaChat()"><i class="fas fa-times"></i></div>
+            </div>
+            
+            <div class="wa-chat-body">
+                <div class="wa-msg-received">
+                    أهلاً بك 👋<br>كيف يمكننا مساعدتك اليوم؟
+                    <span class="wa-time">الآن</span>
+                </div>
+
+                <button class="wa-faq-btn" onclick="sendWaMsg('السلام عليكم، أريد الاستفسار عن المصروفات الدراسية.')">💰 تفاصيل المصروفات الدراسية</button>
+                <button class="wa-faq-btn" onclick="sendWaMsg('السلام عليكم، ما هي شروط التقديم والأوراق المطلوبة؟')">📄 شروط التقديم والأوراق</button>
+                <button class="wa-faq-btn" onclick="sendWaMsg('السلام عليكم، هل يوجد وظائف شاغرة حالياً؟')">💼 الاستفسار عن الوظائف</button>
+                <button class="wa-faq-btn" onclick="sendWaMsg('السلام عليكم، أريد معرفة عنوان المدرسة بالتفصيل.')">📍 عنوان المدرسة والموقع</button>
+                <button class="wa-faq-btn" onclick="sendWaMsg('السلام عليكم، عندي شكوى وأرغب في التحدث مع الإدارة.')">⚠️ تقديم شكوى عاجلة</button>
+            </div>
+
+            <div class="wa-chat-footer">
+                <input type="text" id="waCustomInput" class="wa-input" placeholder="اكتب رسالتك هنا...">
+                <button class="wa-send-btn" onclick="sendCustomWaMsg()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="wa-float-btn" onclick="toggleWaChat()">
+            <i class="fab fa-whatsapp"></i>
+            <div class="wa-notify-dot"></div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- سكربت قائمة الموبايل والواتساب ---
+        const waNumber = "201000434738"; 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.getElementById('mobile-menu-toggle');
+            const navLinks = document.getElementById('main-nav-links');
+            toggleButton.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+        });
+        function toggleWaChat() {
+            const chatBox = document.getElementById('waChatBox');
+            if (chatBox.style.display === 'none' || chatBox.style.display === '') {
+                chatBox.style.display = 'flex';
+            } else {
+                chatBox.style.display = 'none';
+            }
+        }
+        function sendWaMsg(msg) {
+            const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+        }
+        function sendCustomWaMsg() {
+            const input = document.getElementById('waCustomInput');
+            const msg = input.value.trim();
+            if (msg) {
+                sendWaMsg(msg);
+                input.value = '';
+            }
+        }
+        document.getElementById('waCustomInput').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendCustomWaMsg();
+            }
+        });
+
+
+        /* --- دوال الحقول الديناميكية --- */
+        
+        let expCount = 1; // عداد الخبرات
+        let courseCount = 1; // عداد الدورات
+
+        function addEntry(containerId, type) {
+            const container = document.getElementById(containerId);
+            let template = '';
+            let newIndex;
+            
+            if (type === 'experience') {
+                expCount++;
+                newIndex = expCount;
+                template = `
+                    <div class="dynamic-entry" data-index="${newIndex}">
+                        <input type="text" name="experience_company_${newIndex}" class="form-control" placeholder="اسم جهة العمل ${newIndex}" required>
+                        <input type="text" name="experience_job_title_${newIndex}" class="form-control" placeholder="المسمى الوظيفي ${newIndex}" required>
+                        <input type="text" name="experience_duration_${newIndex}" class="form-control" placeholder="مدة العمل ${newIndex} (مثال: سنتان)" required>
+                        <button type="button" class="btn-remove" onclick="removeEntry(this, '${containerId}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            } else if (type === 'course') {
+                courseCount++;
+                newIndex = courseCount;
+                template = `
+                    <div class="dynamic-entry" data-index="${newIndex}">
+                        <input type="text" name="course_name_${newIndex}" class="form-control" placeholder="اسم الدورة ${newIndex}">
+                        <input type="text" name="course_provider_${newIndex}" class="form-control" placeholder="الجهة المانحة ${newIndex}">
+                        <div class="form-control" style="background:transparent; border:none; padding:0;"></div>
+                        <button type="button" class="btn-remove" onclick="removeEntry(this, '${containerId}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            }
+
+            container.insertAdjacentHTML('beforeend', template);
+            // إظهار زر الحذف في القالب الأول بعد إضافة ثاني قالب
+            const firstRemoveBtnExp = document.querySelector('.btn-remove-exp');
+            const firstRemoveBtnCourse = document.querySelector('.btn-remove-course');
+            if (containerId === 'experienceFields' && firstRemoveBtnExp) firstRemoveBtnExp.style.display = 'block';
+            if (containerId === 'courseFields' && container.children.length > 1 && firstRemoveBtnCourse) firstRemoveBtnCourse.style.display = 'block';
+        }
+
+        function removeEntry(button, containerId) {
+            const entry = button.closest('.dynamic-entry');
+            entry.remove();
+
+            const container = document.getElementById(containerId);
+            
+            // إخفاء زر الحذف إذا بقي قالب واحد فقط
+            if (container.children.length === 1) {
+                container.querySelector('.btn-remove').style.display = 'none';
+            }
+            
+            // إعادة ترقيم الحقول (ضروري لجمع البيانات بشكل صحيح)
+            reindexFields(containerId);
+        }
+
+        function reindexFields(containerId) {
+            const container = document.getElementById(containerId);
+            const entries = container.querySelectorAll('.dynamic-entry');
+            
+            entries.forEach((entry, index) => {
+                const newIndex = index + 1;
+                entry.dataset.index = newIndex;
+                
+                entry.querySelectorAll('.form-control').forEach(input => {
+                    let oldName = input.name;
+                    let prefix = oldName.substring(0, oldName.lastIndexOf('_') + 1);
+                    input.name = prefix + newIndex;
+                    
+                    if (prefix.includes('experience_company')) input.placeholder = `اسم جهة العمل ${newIndex}`;
+                    // التعديل هنا: استخدام الاسم والمسمى الجديدين
+                    if (prefix.includes('experience_job_title')) input.placeholder = `المسمى الوظيفي ${newIndex}`;
+                    if (prefix.includes('experience_duration')) input.placeholder = `مدة العمل ${newIndex} (مثال: سنتان)`;
+                    if (prefix.includes('course_name')) input.placeholder = `اسم الدورة ${newIndex}`;
+                    if (prefix.includes('course_provider')) input.placeholder = `الجهة المانحة ${newIndex}`;
+                });
+            });
+
+            if (containerId === 'experienceFields') { expCount = entries.length; } 
+            if (containerId === 'courseFields') { courseCount = entries.length; }
+        }
+
+        
+        /* --- سكربت الإرسال المباشر إلى تليجرام (AJAX) --- */
+
+        const TELEGRAM_API_URL = `https://api.telegram.org/bot8427486110:AAEmsLsIiZKKrggxY9VFYcRohX4pac7rHh0/sendMessage?chat_id=5236960241&text=`;
+        
+        document.getElementById('jobsForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const formMessage = document.getElementById('formMessage');
+            const submitBtn = form.querySelector('.btn-submit');
+            
+            // تجميع بيانات النموذج في رسالة واحدة
+            let message = "🔔 **طلب توظيف جديد**\n\n";
+            let experiences = '';
+            let courses = '';
+            
+            message += "=== البيانات الأساسية ===\n";
+            message += `*الاسم*: ${formData.get('name')}\n`;
+            message += `*تاريخ الميلاد*: ${formData.get('dob')}\n`;
+            message += `*رقم الهاتف*: ${formData.get('phone')}\n`;
+            message += `*البريد الإلكتروني*: ${formData.get('email')}\n`;
+            message += `*العنوان*: ${formData.get('address')}\n`; // حقل العنوان الجديد
+            message += `*الوظيفة المتقدم إليها*: ${formData.get('job_applied')}\n`;
+            
+            message += "\n=== المؤهل الدراسي ===\n";
+            message += `*الجامعة*: ${formData.get('uni_name')}\n`;
+            message += `*الكلية*: ${formData.get('faculty_name')}\n`;
+            message += `*القسم/الشعبة*: ${formData.get('dept_name')}\n`;
+            message += `*سنة التخرج*: ${formData.get('grad_year')}\n`;
+            
+            // جمع الخبرات والدورات الديناميكية
+            for (let [key, value] of formData.entries()) {
+                if (key.startsWith('experience_company_')) {
+                    const index = key.split('_').pop();
+                    const company = value;
+                    // التعديل هنا: استخدام اسم الحقل الجديد
+                    const jobTitle = formData.get(`experience_job_title_${index}`); 
+                    const duration = formData.get(`experience_duration_${index}`);
+                    
+                    if (company && jobTitle && duration) {
+                        experiences += `    - جهة العمل: ${company}\n    - المسمى الوظيفي: ${jobTitle}\n    - المدة: ${duration}\n---\n`;
+                    }
+                }
+                if (key.startsWith('course_name_')) {
+                    const index = key.split('_').pop();
+                    const name = value;
+                    const provider = formData.get(`course_provider_${index}`);
+
+                    if (name && provider) {
+                        courses += `    - اسم الدورة: ${name}\n    - الجهة: ${provider}\n---\n`;
+                    }
+                }
+            }
+
+            message += "\n=== الخبرات السابقة ===\n";
+            message += experiences.trim() || '*لا توجد خبرات سابقة مسجلة.*\n';
+
+            message += "\n=== الدورات التدريبية ===\n";
+            message += courses.trim() || '*لا توجد دورات تدريبية مسجلة.*\n';
+
+            // إظهار حالة التحميل وتعطيل الزر
+            submitBtn.innerHTML = '... جاري الإرسال <i class="fas fa-spinner fa-spin"></i>';
+            submitBtn.disabled = true;
+            formMessage.innerHTML = ''; 
+
+            // الإرسال إلى تليجرام
+            fetch(TELEGRAM_API_URL + encodeURIComponent(message) + '&parse_mode=Markdown', {
+                method: 'GET'
+            })
+            .then(response => {
+                if (response.ok) { return response.json(); } else { throw new Error('Telegram API failed.'); }
+            })
+            .then(data => {
+                if (data.ok) {
+                    formMessage.innerHTML = '<div style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 15px; margin-bottom: 20px; border-radius: 8px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check-circle"></i> **تم استلام طلب التوظيف بنجاح. سيتم التواصل معك قريباً!**</div>';
+                    form.reset(); 
+                } else {
+                    throw new Error(data.description || 'Telegram reported an error.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                formMessage.innerHTML = '<div style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 15px; margin-bottom: 20px; border-radius: 8px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-exclamation-triangle"></i> **حدث خطأ في الإرسال. يرجى مراجعة إعدادات البوت.**</div>';
+            })
+            .finally(() => {
+                submitBtn.innerHTML = 'إرسال طلب التوظيف <i class="fas fa-paper-plane"></i>';
+                submitBtn.disabled = false;
+                formMessage.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

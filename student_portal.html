@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الطالب | مدرسة صلاح الدين الإسلامية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #1a3c6d;
+            --secondary-color: #f0a500;
+            --bg-color: #f8f9fa;
+            --text-dark: #2d3436;
+            --white: #ffffff;
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.05);
+            /* ألوان التقديرات */
+            --grade-blue: #0984e3;
+            --grade-green: #00b894;
+            --grade-yellow: #fdcb6e;
+            --grade-red: #d63031;
+        }
+
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-color); color: var(--text-dark); margin: 0; padding-bottom: 50px; }
+        
+        header { background: var(--white); box-shadow: 0 2px 15px rgba(0,0,0,0.05); padding: 15px 0; position: sticky; top: 0; z-index: 1000; }
+        .navbar { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+        .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--primary-color); font-size: 1.2rem; }
+        .logo img { height: 45px; }
+
+        .portal-hero {
+            background: linear-gradient(135deg, var(--primary-color), #3f72af);
+            padding: 60px 20px; text-align: center; color: var(--white); border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; margin-bottom: 40px;
+        }
+        .search-box-wrapper { position: relative; max-width: 600px; margin: 30px auto 0; }
+        .main-search-input {
+            width: 100%; padding: 15px 25px; border-radius: 50px; border: none; font-size: 1.1rem; font-family: inherit; box-shadow: 0 5px 15px rgba(0,0,0,0.2); outline: none;
+        }
+        .suggestions-list {
+            position: absolute; top: 100%; left: 0; right: 0; background: var(--white); border-radius: 15px; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); overflow: hidden; z-index: 100; display: none; max-height: 300px; overflow-y: auto; text-align: right;
+        }
+        .suggestion-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #eee; transition: 0.2s; display: flex; justify-content: space-between; color: var(--text-dark); }
+        .suggestion-item:hover { background-color: #f0f4f8; padding-right: 25px; color: var(--primary-color); }
+
+        .auth-container { max-width: 400px; margin: -30px auto 30px; background: var(--white); padding: 30px; border-radius: 20px; box-shadow: var(--shadow-soft); text-align: center; display: none; position: relative; z-index: 10; }
+        .btn-verify { background: var(--secondary-color); color: var(--white); border: none; padding: 10px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-verify:hover { background: #d99600; }
+        .code-input { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; font-size: 1.2rem; text-align: center; margin-bottom: 15px; }
+
+        .student-dashboard { max-width: 1000px; margin: 0 auto; display: none; padding: 0 15px; }
+        .info-card { background: var(--white); padding: 25px; border-radius: 15px; box-shadow: var(--shadow-soft); border-right: 5px solid var(--primary-color); margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .info-item label { display: block; font-size: 0.85rem; color: #888; margin-bottom: 5px; }
+        .info-item div { font-weight: 700; color: var(--primary-color); font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+
+        .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .action-btn {
+            background: var(--white); border: 2px solid #eee; padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .action-btn:hover, .action-btn.active { border-color: var(--secondary-color); background: rgba(240, 165, 0, 0.05); color: var(--secondary-color); transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+
+        .result-container { 
+            background: var(--white); border-radius: 15px; box-shadow: var(--shadow-soft); overflow: hidden; display: none; animation: fadeIn 0.5s; 
+            background-color: #ffffff !important;
+        }
+        .result-header { background: var(--primary-color); color: var(--white); padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .result-table-wrapper { overflow-x: auto; padding: 20px; background-color: #fff; }
+        
+        table { width: 100%; border-collapse: collapse; min-width: 700px; white-space: nowrap; }
+        th, td { padding: 12px 15px; text-align: center; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; color: var(--primary-color); font-weight: 800; font-size: 0.95rem; }
+        
+        /* تلوين أعمدة الشهور بشكل خفيف للتمييز */
+        .col-month { background-color: #fcfcfc; }
+        .col-avg { background-color: #e8f4fd; font-weight: bold; color: var(--primary-color); }
+        .col-test { background-color: #fffbf0; }
+        /* تلوين عمود المجموع الجديد */
+        .col-total { background-color: #ffe0b2; font-weight: 900; color: var(--primary-color); font-size: 1.1rem; }
+
+
+        .grade-cell { font-weight: bold; color: #fff; border-radius: 5px; padding: 5px 15px; display: inline-block; min-width: 80px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .bg-blue { background-color: var(--grade-blue); }
+        .bg-green { background-color: var(--grade-green); }
+        .bg-yellow { background-color: var(--grade-yellow); color: #2d3436; }
+        .bg-red { background-color: var(--grade-red); }
+        
+        .btn-download { background: var(--white); color: var(--primary-color); border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.9rem; border: 1px solid var(--white); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <img src="logo.png" alt="شعار المدرسة" onerror="this.style.display='none'"> 
+                <span>مدرسة صلاح الدين الخاصة</span>
+            </div>
+            <a href="index.html" style="color: var(--text-dark); text-decoration: none; font-weight: bold; font-size: 0.9rem;"><i class="fas fa-home"></i> الرئيسية</a>
+        </div>
+    </header>
+
+    <section class="portal-hero">
+        <h1>بوابة نتائج الطلاب</h1>
+        <p style="opacity: 0.9; margin-top: 10px;">ابحث عن اسمك للاطلاع على النتائج</p>
+        <div class="search-box-wrapper">
+            <input type="text" id="nameSearch" class="main-search-input" placeholder="اكتب اسم الطالب هنا..." autocomplete="off">
+            <div id="suggestions" class="suggestions-list"></div>
+        </div>
+    </section>
+
+    <div id="authSection" class="auth-container">
+        <h3 class="auth-title">التحقق من الهوية</h3>
+        <p style="font-size: 0.9rem; color: #777; margin-bottom: 15px;">أدخل كود الطالب الخاص بـ: <br><strong id="selectedStudentName" style="color:var(--text-dark)"></strong></p>
+        <input type="number" id="studentCodeInput" class="code-input" placeholder="كود الطالب">
+        <button onclick="verifyCode()" class="btn-verify">عــرض البيـانـات</button>
+        <p id="authError" style="color: red; font-size: 0.85rem; margin-top: 10px; display: none;"></p>
+    </div>
+
+    <div id="dashboard" class="student-dashboard">
+        <div class="info-card">
+            <div class="info-item"><label>الاسم</label><div id="infoName"></div></div>
+            <div class="info-item"><label>الصف الدراسي</label><div id="infoGrade"></div></div>
+            <div class="info-item"><label>الفصل</label><div id="infoClass"></div></div>
+            <div class="info-item"><label>رقم الجلوس</label><div id="infoSeat"></div></div>
+            <div class="info-item"><label>الرقم القومي</label><div id="infoNationalID"></div></div>
+        </div>
+
+        <div class="actions-grid">
+            <button class="action-btn" onclick="showResult('YearWork_T1', 'أعمال السنة - الفصل الدراسي الأول')">
+                <i class="fas fa-chart-bar"></i> أعمال السنة (ترم 1)
+            </button>
+            
+            <button class="action-btn" onclick="showResult('Result_T1', 'نتيجة الفصل الدراسي الأول')">
+                <i class="fas fa-file-alt"></i> نتيجة (ترم 1)
+            </button>
+            
+            <button class="action-btn" onclick="showResult('YearWork_T2', 'أعمال السنة - الفصل الدراسي الثاني')">
+                <i class="fas fa-chart-line"></i> أعمال السنة (ترم 2)
+            </button>
+            
+            <button class="action-btn" onclick="showResult('Result_Year', 'نتيجة العام الدراسي')">
+                <i class="fas fa-graduation-cap"></i> النتيجة النهائية
+            </button>
+        </div>
+
+        <div id="resultWrapper" class="result-container">
+            <div class="result-header">
+                <h3 id="resultTitle" style="margin:0;">عنوان النتيجة</h3>
+                <button onclick="downloadResult()" class="btn-download"><i class="fas fa-camera"></i> حفظ كصورة</button>
+            </div>
+            <div id="tableContainer" class="result-table-wrapper"></div>
+        </div>
+    </div>
+
+    <script>
+        let excelData = {};
+        let currentStudent = null;
+
+        window.onload = function() {
+            loadExcelFile("Data/Students.xlsx"); 
+        };
+
+        async function loadExcelFile(url) {
+            try {
+                const response = await fetch(url);
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                
+                workbook.SheetNames.forEach(sheetName => {
+                    excelData[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {defval:""});
+                });
+                console.log("Loaded Sheets:", Object.keys(excelData));
+            } catch (error) {
+                console.error("Error:", error);
+                alert("يرجى التأكد من وجود ملف Students.xlsx في مجلد Data");
+            }
+        }
+
+        const searchInput = document.getElementById('nameSearch');
+        const suggestionsBox = document.getElementById('suggestions');
+
+        searchInput.addEventListener('keyup', function() {
+            const query = this.value.trim().toLowerCase();
+            suggestionsBox.innerHTML = '';
+            
+            if (query.length < 2 || !excelData['MainData']) {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+
+            const matches = excelData['MainData'].filter(student => 
+                student['Name'] && student['Name'].toString().toLowerCase().includes(query)
+            );
+
+            if (matches.length > 0) {
+                suggestionsBox.style.display = 'block';
+                matches.slice(0, 10).forEach(student => {
+                    const div = document.createElement('div');
+                    div.className = 'suggestion-item';
+                    div.innerHTML = `<span>${student['Name']}</span> <span style="font-size:0.8rem; color:#888;">${student['Grade']||''}</span>`;
+                    div.onclick = () => selectStudent(student);
+                    suggestionsBox.appendChild(div);
+                });
+            } else {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        function selectStudent(student) {
+            currentStudent = student;
+            searchInput.value = student['Name'];
+            suggestionsBox.style.display = 'none';
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('selectedStudentName').innerText = student['Name'];
+            document.getElementById('studentCodeInput').value = '';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('authError').style.display = 'none';
+        }
+
+        function verifyCode() {
+            const enteredCode = document.getElementById('studentCodeInput').value.trim();
+            if (currentStudent && enteredCode == currentStudent['Code']) {
+                showDashboard();
+            } else {
+                document.getElementById('authError').style.display = 'block';
+                document.getElementById('authError').innerText = "كود الطالب غير صحيح";
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('infoName').innerText = currentStudent['Name'];
+            document.getElementById('infoGrade').innerText = currentStudent['Grade'];
+            document.getElementById('infoClass').innerText = currentStudent['Class'] || '-';
+            document.getElementById('infoSeat').innerText = currentStudent['SeatNo'] || '-';
+            document.getElementById('infoNationalID').innerText = currentStudent['NationalID'] || '-';
+            document.getElementById('resultWrapper').style.display = 'none';
+        }
+
+        function showResult(type, title) {
+            const container = document.getElementById('resultWrapper');
+            const tableDiv = document.getElementById('tableContainer');
+            const titleEl = document.getElementById('resultTitle');
+            
+            document.querySelectorAll('.action-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            titleEl.innerText = title;
+            container.style.display = 'block';
+
+            if (type === 'YearWork_T1') {
+                renderAggregatedTable('T1', tableDiv);
+            } 
+            else if (type === 'YearWork_T2') {
+                renderAggregatedTable('T2', tableDiv);
+            }
+            else {
+                if (!excelData[type]) {
+                    tableDiv.innerHTML = `<div style="text-align:center; padding:30px; color:#777;">لم يتم العثور على بيانات (${type})</div>`;
+                    return;
+                }
+                const studentResult = excelData[type].find(row => row['Code'] == currentStudent['Code']);
+                if (!studentResult) {
+                    tableDiv.innerHTML = `<div style="text-align:center; padding:30px; color:#777;">لا توجد نتيجة مسجلة لهذا الطالب</div>`;
+                    return;
+                }
+                renderFinalResultTable(studentResult, tableDiv);
+            }
+        }
+
+        // --- دالة التجميع الذكية والمحدثة لأعمال السنة ---
+        function renderAggregatedTable(termPrefix, container) {
+            
+            // 1. العثور على المواد (Subject List)
+            let subjects = [];
+            let foundData = false;
+            
+            // قائمة شيتات أعمال السنة التي سيتم جمعها
+            const monthSheets = [`${termPrefix}_Month1`, `${termPrefix}_Month2`, `${termPrefix}_Month3`];
+            const testSheets = [`${termPrefix}_Test1`, `${termPrefix}_Test2`];
+            const allSheets = [...monthSheets, ...testSheets];
+            
+            // محاولة استخراج أسماء المواد من أي شيت متاح
+            for (const sheetName of allSheets) {
+                if (excelData[sheetName]) {
+                    const row = excelData[sheetName].find(r => r['Code'] == currentStudent['Code']);
+                    if (row) {
+                        foundData = true;
+                        subjects = Object.keys(row).filter(k => 
+                            !['Code', 'Name', 'Grade', 'Class', 'SeatNo', 'NationalID', 'id', '__rowNum__'].includes(k)
+                        );
+                        if (subjects.length > 0) break; // توقف عند العثور على المواد
+                    }
+                }
+            }
+
+            if (!foundData) {
+                container.innerHTML = `<div style="padding:20px; text-align:center;">لم يتم العثور على بيانات أعمال السنة لهذا الطالب في هذا الترم.</div>`;
+                return;
+            }
+
+            // 2. بناء الجدول
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="text-align:right">المادة</th>
+                            <th class="col-month">شهر 1</th>
+                            <th class="col-month">شهر 2</th>
+                            <th class="col-month">شهر 3</th>
+                            <th class="col-avg">المتوسط</th>
+                            <th class="col-test">اختبار 1</th>
+                            <th class="col-test">اختبار 2</th>
+                            <th class="col-total">المجموع الكلي</th> </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            subjects.forEach(subject => {
+                // جلب قيم الشهور والاختبارات
+                let m1 = getValue(termPrefix, 'Month1', subject);
+                let m2 = getValue(termPrefix, 'Month2', subject);
+                let m3 = getValue(termPrefix, 'Month3', subject);
+                let t1 = getValue(termPrefix, 'Test1', subject);
+                let t2 = getValue(termPrefix, 'Test2', subject);
+
+                // حساب المتوسط
+                let avg = '-';
+                let sumMonths = 0, countMonths = 0;
+                if(isNumeric(m1)) { sumMonths += parseFloat(m1); countMonths++; }
+                if(isNumeric(m2)) { sumMonths += parseFloat(m2); countMonths++; }
+                if(isNumeric(m3)) { sumMonths += parseFloat(m3); countMonths++; }
+                
+                let numericAvg = 0;
+                if (countMonths > 0) {
+                    numericAvg = sumMonths / countMonths;
+                    avg = numericAvg.toFixed(1);
+                    if (avg.endsWith('.0')) avg = avg.slice(0, -2); // إزالة الكسور الصفرية
+                }
+
+                // حساب المجموع الكلي (المتوسط + اختبار 1 + اختبار 2)
+                let totalScore = '-';
+                let sumTotal = numericAvg;
+                let countTotal = countMonths > 0 ? 1 : 0; // المتوسط يحسب كجزء واحد إن وجد
+
+                let numT1 = isNumeric(t1) ? parseFloat(t1) : 0;
+                let numT2 = isNumeric(t2) ? parseFloat(t2) : 0;
+
+                if (numT1 > 0) { sumTotal += numT1; countTotal++; }
+                if (numT2 > 0) { sumTotal += numT2; countTotal++; }
+                
+                if (countTotal > 0) {
+                    // المجموع الكلي هو مجموع الثلاثة عناصر (المتوسط + الاختبارين)
+                    totalScore = sumTotal.toFixed(1);
+                    if (totalScore.endsWith('.0')) totalScore = totalScore.slice(0, -2);
+                }
+
+
+                html += `
+                    <tr>
+                        <td style="font-weight:bold; color:var(--primary-color); text-align:right;">${subject}</td>
+                        <td class="col-month">${m1}</td>
+                        <td class="col-month">${m2}</td>
+                        <td class="col-month">${m3}</td>
+                        <td class="col-avg">${avg}</td>
+                        <td class="col-test">${t1}</td>
+                        <td class="col-test">${t2}</td>
+                        <td class="col-total">${totalScore}</td> </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        // دالة مساعدة لجلب القيمة من شيت معين
+        function getValue(term, type, subject) {
+            const sheetName = `${term}_${type}`;
+            if (!excelData[sheetName]) return '-';
+            
+            const row = excelData[sheetName].find(r => r['Code'] == currentStudent['Code']);
+            if (!row || !row[subject]) return '-';
+            
+            return row[subject];
+        }
+
+        function isNumeric(n) {
+            // التحقق من أن القيمة ليست فارغة ويمكن تحويلها لرقم
+            return n !== "" && n !== null && n !== undefined && !isNaN(parseFloat(n)) && isFinite(n);
+        }
+
+        // --- دالة عرض النتيجة النهائية (كما هي) ---
+        function renderFinalResultTable(row, container) {
+            const ignoreKeys = ['Code', 'Name', 'Grade', 'Class', 'SeatNo', 'NationalID', 'id', '__rowNum__'];
+            let html = `<table><thead><tr><th style="text-align:right">المادة</th><th>الدرجة</th><th>التقييم</th></tr></thead><tbody>`;
+
+            Object.keys(row).forEach(key => {
+                if (ignoreKeys.includes(key)) return;
+                let val = row[key];
+                if (val === "") return;
+
+                let evalHtml = '-';
+                if (isNumeric(val)) {
+                    const score = parseFloat(val);
+                    let colorClass = "bg-red"; let text = "دون المستوى";
+                    if (score >= 85) { colorClass = "bg-blue"; text = "ممتاز"; }
+                    else if (score >= 75) { colorClass = "bg-green"; text = "جيد جداً"; }
+                    else if (score >= 65) { colorClass = "bg-yellow"; text = "جيد"; }
+                    else if (score >= 50) { colorClass = "bg-yellow"; text = "مقبول"; }
+                    
+                    evalHtml = `<span class="grade-cell ${colorClass}">${text}</span>`;
+                }
+
+                html += `<tr><td style="text-align:right; font-weight:bold;">${key}</td><td style="font-weight:bold; font-size:1.1rem;">${val}</td><td>${evalHtml}</td></tr>`;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        function downloadResult() {
+            const element = document.getElementById("resultWrapper");
+            html2canvas(element, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
+                const link = document.createElement("a");
+                link.download = `نتيجة_${currentStudent['Name']}.png`;
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
